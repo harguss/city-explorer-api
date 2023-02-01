@@ -21,15 +21,15 @@ app.get('/', (request, response) => {
 
   http://localhost:3002/weather?searchQuery=Sioux_Falls
 
-  app.get('/weather', (request,reponse)=>{
+  app.get('/weather', (request,response)=>{
     try {
       let weatherCity = request.query.searchQuery;
       // console.log('getweather city', weatherCity);
       let weatherDataObject = weatherData.find(day => day.city_name === weatherCity);
       // console.log('getweather in a city', weatherDataObject);
       let dataToResponse = weatherDataObject.data.map(forecast => new Forecast(forecast));
-      console.log('did we get object back from constructor', dataToResponse);
-      reponse.status(200).send('string chewing.....');
+      console.log('are we ready with data for the front end?', dataToResponse);
+      response.status(200).send(dataToResponse);
     } catch (error) {
       console.error('ERROR', error);
     }
