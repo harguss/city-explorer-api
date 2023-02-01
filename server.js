@@ -2,7 +2,7 @@
 
 const express = require('express');
 require('dotenv').config();
-// let weatherData = require('./data/weather.json');
+let weatherData = require('./data/weather.json');
 const cors = require('cors');
 const app = express();
 
@@ -11,8 +11,10 @@ app.use(cors());
 const PORT = process.env.PORT || 5005;
 
 app.get('/', (request, response) => {
+  console.log(weatherData);
   response.status(200).send('hello from our server HOME route / !!!!!');
  });
+
   // http://localhost:3003/weather? city_name=Paris
   //   try {
   //     // console.log('req lat', weatherData[0].lat);
@@ -38,9 +40,9 @@ app.get('/', (request, response) => {
 // });
 
 // // 404 not found path.
-// app.use('*', (request, response) => {
-//   response.status(404).send('The route was not found. Error 404');
-// });
+app.use('*', (request, response) => {
+  response.status(404).send('The route was not found. Error 404');
+});
 
 // class Forecast {
 //   constructor(weatherObject) {
