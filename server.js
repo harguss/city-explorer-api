@@ -10,13 +10,9 @@ app.use(cors());
 
 const PORT = process.env.PORT || 5005;
 
-app.get('/hello', (request, response) => {
-  response.send('hello from our server HOME route / !!');
-
-  app.get('/hello', (request, response) => {
-    console.log('request object', request.query.name);
-    response.status(200).send('hello');
-  });
+app.get('/', (request, response) => {
+  response.status(200).send('hello from our server HOME route / !!!!!');
+ });
   // http://localhost:3003/weather? city_name=Paris
   //   try {
   //     // console.log('req lat', weatherData[0].lat);
@@ -39,7 +35,7 @@ app.get('/hello', (request, response) => {
   //       next(error);
   //     }
   //   }
-});
+// });
 
 // // 404 not found path.
 // app.use('*', (request, response) => {
