@@ -23,37 +23,27 @@ app.get('/', (request, response) => {
 
   app.get('/weather', (request,response)=>{
     try {
+      console.log('!!!!!!!!!!!!',request.query);
+      let lat = request.query.latitude;
+      let lon = request.query.longitude;
       let weatherCity = request.query.searchQuery;
-      // console.log('getweather city', weatherCity);
-      let weatherDataObject = weatherData.find(day => day.city_name === weatherCity);
-      // console.log('getweather in a city', weatherDataObject);
+
+
+
+      console.log('getweather city', weatherCity);
+      let weatherDataObject = weatherData.find(day => day.city_name.toLowerCase() === weatherCity.toLowerCase());
+      console.log('getweather in a city', weatherDataObject);
+
       let dataToResponse = weatherDataObject.data.map(forecast => new Forecast(forecast));
       console.log('are we ready with data for the front end?', dataToResponse);
       response.status(200).send(dataToResponse);
+      
     } catch (error) {
       console.error('ERROR', error);
     }
   }
   );
-  
-   
-
-      //use find to pull data from json  weatherData.find()
-      // let weatherDataObject = weatherData.find(day => day.city_name === weatherCity);
-      // console.log('objects', weatherDataObject.data);
-      
-      //send data to the new Weather class
-      
-      // console.log('did we get object back from constructor', dataToResponse);
-      //response
-      // response.send(dataToResponse);
-    // catch (error) {
-        // next(error);
-      // }
-    
-// });
-
-// // 404 not found path.
+   // 404 not found path.
 app.use('*', (request, response) => {
   response.status(404).send('The route was not found. Error 404');
 });
@@ -64,7 +54,7 @@ class Forecast {
     //date
     this.date = weatherObject.datetime;
     //description
-    this.description = weatherObject.description;
+    this.description = weatherObject.weather.description;
   }
 }
 
