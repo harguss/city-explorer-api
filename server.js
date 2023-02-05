@@ -1,46 +1,52 @@
 'use strict';
 
+
 const express = require('express');
 require('dotenv').config();
-let weatherData = require('./data/weather.json');
+// let weatherData = require('./data/weather.json');
 const cors = require('cors');
 const app = express();
-
+const axios = require('axios');
 app.use(cors());
+
 
 const PORT = process.env.PORT || 5005;
 
-app.get('/', (request, response) => {
-  try {
-    console.log(weatherData);
-    response.status(200).send('hello from our server HOME route / !!!!!');
-  } catch (error) {
-    console.log(error);
-  }
- });
+// let WEATHER_API_KEY = process.env.WEATHER_API_KEY;
+app.get('/',(request, response)=>{
+  response.send('hello')
+});
 
-  http://localhost:3002/weather?searchQuery=Sioux_Falls
+  
 
-  app.get('/weather', (request,response)=>{
-    try {
-      console.log('!!!!!!!!!!!!',request.query);
-      let lat = request.query.latitude;
-      let lon = request.query.longitude;
-      let weatherCity = request.query.searchQuery;
-
-
-
-      console.log('getweather city', weatherCity);
-      let weatherDataObject = weatherData.find(day => day.city_name.toLowerCase() === weatherCity.toLowerCase());
-      console.log('getweather in a city', weatherDataObject);
-
-      let dataToResponse = weatherDataObject.data.map(forecast => new Forecast(forecast));
-      console.log('are we ready with data for the front end?', dataToResponse);
-      response.status(200).send(dataToResponse);
+  // app.get('/movie'), (request, response)=>{
+  //   try {
       
-    } catch (error) {
-      console.error('ERROR', error);
-    }
+  //   } catch (error) {
+      
+  //   }
+  // };
+
+  app.get('/weather', async(request,response)=>{
+  console.log(request.query.searchQuery);
+    // try {
+     
+    //   let lat = request.query.latitude;
+    //   let lon = request.query.longitude;
+    //   let weatherCity = request.query.searchQuery;
+
+      // let weatherDataObject = weatherData.find(day => day.city_name.toLowerCase() === weatherCity.toLowerCase());
+      //  const weatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}=London&days=1&aqi=no&alerts=no`
+      //  let weatherInfo = await axios(weatherUrl);
+
+      //  console.log('!!!!!!!!!!!!!xxxxxxx',weatherInfo);
+
+      // let dataToResponse = weatherInfo.data.map(weatherInfo => new Forecast(weatherInfo));
+      response.status(200).send('dataToResponse');
+      
+    // } catch (error) {
+    //   console.error('ERROR', error);
+    // }
   }
   );
    // 404 not found path.
@@ -57,5 +63,18 @@ class Forecast {
     this.description = weatherObject.weather.description;
   }
 }
+// app.get('/', (request, response) => {
+//   try {
+//     console.log(weatherData);
+//     response.status(200).send('hello from our server HOME route / !!!!!');
+//   } catch (error) {
+//     console.log(error);
+//   }
+//  });
+// class Movie {
+//   constructor(movieObject) {
+//     console.log('')
+//   }
+// }
 
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
