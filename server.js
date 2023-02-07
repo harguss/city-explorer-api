@@ -13,55 +13,76 @@ app.use(cors());
 const PORT = process.env.PORT || 5005;
 
 let WEATHER_API_KEY = process.env.WEATHER_API_KEY;
-app.get('/',(request, response)=>{
+app.get('/', (request, response) => {
   response.send('hello')
 });
 
-  
 
-  // app.get('/movie'), (request, response)=>{
-  //   try {
-      
-  //   } catch (error) {
-      
-  //   }
-  // };
-
-  app.get('/weather', async(request,response)=>{
-  console.log(request.query.searchQuery);
-    try {
-     
-      let lat = request.query.latitude;
-      let lon = request.query.longitude;
-      let weatherCity = request.query.searchQuery;
-
-      // let weatherDataObject = weatherData.find(day => day.city_name.toLowerCase() === weatherCity.toLowerCase());
-        const weatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&query=${lat},${lon},${weatherCity}&format=json`
-       let weatherInfo = await axios(weatherUrl);
-
-       console.log('!!!!!!!!!!!!!xxxxxxx',weatherInfo.data);
-
-      let dataToResponse = weatherInfo.data.map(weatherInfo => new Forecast(weatherInfo));
-      console.log("🚀 ~ file: server.js:45 ~ app.get ~ dataToResponse", dataToResponse)
-      response.status(200).send('dataToResponse');
-
-      
-      
-    } catch (error) {
-      console.error('ERROR', error);
-    }
+///////////
+app.get('/movie', async (request, response, next) => {
+  try {
+    let movieSearchQuery = request.query.searchQuery;
+    const movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${movieSearchQuery}&format=json`;
+    let results = await axios.get(movieUrl);
+    let constructorData = results.data;
+    response.status(200).send(constructorData);
+    console.log(results.data);
+  } catch (error) {
+    next(error);
   }
-  );
-   // 404 not found path.
+});
+
+
+app.get('/weather', async (request, response) => {
+  console.log(request.query.searchQuery);
+  try {
+
+    let lat = request.query.latitude;
+    let lon = request.query.longitude;
+    let weatherCity = request.query.searchQuery;
+
+    // let weatherDataObject = weatherData.find(day => day.city_name.toLowerCase() === weatherCity.toLowerCase());
+    const weatherUrl = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&query=${weatherCity}`
+    let weatherInfo = await axios(weatherUrl);
+    let weatherToday = new Forecast(weatherInfo.data)
+
+    console.log('!!!!!!!!!!!!!xxxxxxx', weatherInfo.data);
+    // weatherInfo.data.locatio
+    //  let test = Object.entries(weatherInfo.data);
+    //   console.log('test', test);
+    //   test.map((weather) => {
+    //     new Forecast(weather);
+    //   })
+    // let dataToResponse = weatherInfo.data.map(weatherInfo => new Forecast(weatherInfo));
+    // console.log("🚀 ~ file: server.js:45 ~ app.get ~ dataToResponse", dataToResponse)
+
+    response.status(200).send(weatherToday);
+
+
+
+  } catch (error) {
+    console.error('ERROR', error);
+  }
+}
+);
+// 404 not found path.
 
 
 class Forecast {
   constructor(weatherObject) {
-     console.log('in class constructor', weatherObject.weather.description);
+    console.log('in class constructor', weatherObject);
     //date
-    this.date = weatherObject.datetime;
+    this.date = weatherObject.location.localtime;
     //description
-    this.description = weatherObject.weather.description;
+    this.description = weatherObject.current.condition.text;
+    this.icon = weatherObject.current.condition.icon
+  }
+}
+
+class Movies {
+  constructor(movieObject) {
+    console.log('ello', movieObject);
+    this.movieObject = movieObject.description;
   }
 }
 
@@ -73,12 +94,8 @@ app.get('/', (request, response) => {
   } catch (error) {
     console.log(error);
   }
- });
-// class Movie {
-//   constructor(movieObject) {
-//     console.log('')
-//   }
-// }
+});
+
 app.use('*', (request, response) => {
   response.status(404).send('The route was not found. Error 404');
 });
