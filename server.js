@@ -22,7 +22,8 @@ app.get('/', (request, response) => {
 app.get('/movie', async (request, response, next) => {
   try {
     let movieSearchQuery = request.query.searchQuery;
-    const movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${movieSearchQuery}&format=json`;
+    
+    const movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=movieSearchQuery`;
     let results = await axios.get(movieUrl);
     let constructorData = results.data;
     response.status(200).send(constructorData);
