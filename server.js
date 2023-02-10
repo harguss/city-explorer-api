@@ -20,17 +20,23 @@ app.get('/', (request, response) => {
 
 ///////////
 app.get('/movie', async (request, response, next) => {
-  // console.log('MMMMMMMMMMMMM',request.query.searchQuery);
   try {
     let movieSearchQuery = request.query.searchQuery;
-    //https://api.themoviedb.org/3/search/movie?api_key=0ec2a83719250e1deafbcd141f8ba7af&language=en-US&page=1&include_adult=false&query=seattle
     const movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${movieSearchQuery}&format=json`;
     let results = await axios.get(movieUrl);
-    let constructorData = results.data;
-    // console.log("🚀 ~ file: server.js:30 ~ app.get ~ constructorData", constructorData)
-    
-    response.status(200).send(constructorData);
+
+    // let constructorData = results.data;
+    console.log('XXXXXX',constructorData);
+    let movieData = constructorData.results.map((movies) => new Movie(movies));
+
+    response.status(200).send('movieData');
   
+
+    //     let results = await axios.get(url);
+    //    let constructorData = results.data;
+    //     console.log(constructorData);
+    //     let pictureInstance = results.data.results.map((pic) => new Photos(pic));
+    //     res.status(200).send(pictureInstance);
   } catch (error) {
     next(error);
   }
@@ -50,15 +56,6 @@ app.get('/weather', async (request, response) => {
     let weatherInfo = await axios(weatherUrl);
     let weatherToday = new Forecast(weatherInfo.data)
 
-    // console.log('!!!!!!!!!!!!!xxxxxxx', weatherInfo.data);
-    // weatherInfo.data.locatio
-    //  let test = Object.entries(weatherInfo.data);
-    //   console.log('test', test);
-    //   test.map((weather) => {
-    //     new Forecast(weather);
-    //   })
-    // let dataToResponse = weatherInfo.data.map(weatherInfo => new Forecast(weatherInfo));
-    // console.log("🚀 ~ file: server.js:45 ~ app.get ~ dataToResponse", dataToResponse)
 
     response.status(200).send(weatherToday);
 
@@ -85,7 +82,8 @@ class Forecast {
 
 class Movies {
   constructor(movieObject) {
-    console.log('ello', movieObject);
+    console.log("🚀 ~ file: server.js:94 ~ Movies ~ constructor ~ movieObject", movieObject)
+  
     this.movieObject = movieObject.d;
   }
 }
