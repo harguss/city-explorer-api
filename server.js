@@ -20,14 +20,17 @@ app.get('/', (request, response) => {
 
 ///////////
 app.get('/movie', async (request, response, next) => {
+  // console.log('MMMMMMMMMMMMM',request.query.searchQuery);
   try {
     let movieSearchQuery = request.query.searchQuery;
-    
-    const movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=movieSearchQuery`;
+    //https://api.themoviedb.org/3/search/movie?api_key=0ec2a83719250e1deafbcd141f8ba7af&language=en-US&page=1&include_adult=false&query=seattle
+    const movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${movieSearchQuery}&format=json`;
     let results = await axios.get(movieUrl);
     let constructorData = results.data;
+    // console.log("🚀 ~ file: server.js:30 ~ app.get ~ constructorData", constructorData)
+    
     response.status(200).send(constructorData);
-    console.log(results.data);
+  
   } catch (error) {
     next(error);
   }
@@ -35,7 +38,7 @@ app.get('/movie', async (request, response, next) => {
 
 
 app.get('/weather', async (request, response) => {
-  console.log(request.query.searchQuery);
+  // console.log(request.query.searchQuery);
   try {
 
     let lat = request.query.latitude;
@@ -47,7 +50,7 @@ app.get('/weather', async (request, response) => {
     let weatherInfo = await axios(weatherUrl);
     let weatherToday = new Forecast(weatherInfo.data)
 
-    console.log('!!!!!!!!!!!!!xxxxxxx', weatherInfo.data);
+    // console.log('!!!!!!!!!!!!!xxxxxxx', weatherInfo.data);
     // weatherInfo.data.locatio
     //  let test = Object.entries(weatherInfo.data);
     //   console.log('test', test);
@@ -71,7 +74,7 @@ app.get('/weather', async (request, response) => {
 
 class Forecast {
   constructor(weatherObject) {
-    console.log('in class constructor', weatherObject);
+    // console.log('in class constructor', weatherObject);
     //date
     this.date = weatherObject.location.localtime;
     //description
@@ -83,14 +86,14 @@ class Forecast {
 class Movies {
   constructor(movieObject) {
     console.log('ello', movieObject);
-    this.movieObject = movieObject.description;
+    this.movieObject = movieObject.d;
   }
 }
 
 
 app.get('/', (request, response) => {
   try {
-    console.log(weatherData);
+    // console.log(weatherData);
     response.status(200).send('hello from our server HOME route / !!!!!');
   } catch (error) {
     console.log(error);
