@@ -85,6 +85,11 @@ class Movies {
     console.log("🚀 ~ file: server.js:94 ~ Movies ~ constructor ~ movieObject", movieObject)
   
     this.movieObject = movieObject.d;
+    this.tableName = 'movies';
+    this.title = movie.title;
+    this.overview = movie.overview;
+    this.imageUrl = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
+    this.timestamp = Date.now();
   }
 }
 
