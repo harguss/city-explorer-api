@@ -31,12 +31,6 @@ app.get('/movie', async (request, response, next) => {
 
     response.status(200).send(movieData);
   
-
-    //     let results = await axios.get(url);
-    //    let constructorData = results.data;
-    //     console.log(constructorData);
-    //     let pictureInstance = results.data.results.map((pic) => new Photos(pic));
-    //     res.status(200).send(pictureInstance);
   } catch (error) {
     next(error);
   }
